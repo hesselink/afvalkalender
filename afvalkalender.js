@@ -57,6 +57,8 @@ function toICalString(trashDays) {
   ical.push("BEGIN:VCALENDAR");
   ical.push("VERSION:2.0");
   ical.push("PRODID:-//Erik Hesselink//Afvalkalender//EN");
+  ical.push("X-WR-CALNAME:Afvalkalender");
+  ical.push("X-WR-CALDESC:Afvalkalender voor " + zip + " nummer " + houseNumber);
   const now = new Date();
 
   trashDays.forEach(trashDay => {
