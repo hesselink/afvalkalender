@@ -26,8 +26,6 @@ const zip = args[0];
 const houseNumber = args[1];
 
 https.get("https://www.mijnafvalwijzer.nl/nl/" + zip + "/" + houseNumber + "/", res => {
-  console.log("Status Code: ", res.statusCode);
-
   let data = [];
   res.on("data", chunk => data.push(chunk));
   res.on("end", () => {
