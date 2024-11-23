@@ -48,6 +48,9 @@ function parseTrashDay(trashDayElement, year) {
   const dayString = trashDayElement.children[0].textContent;
   const day = +dayString.split(" ")[1];
   const month = months[dayString.split(" ")[2]];
+  if (trashDayElement.children[1] === undefined) {
+    throw "Unexpected HTML layout: " + trashDayElement.innerHTML;
+  }
   const descString = trashDayElement.children[1].textContent;
   return { day: new Date(year, month, day), type: trashDayElement.className, description: descString };
 }
