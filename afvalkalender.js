@@ -48,8 +48,8 @@ function parseTrashDay(trashDayElement, year) {
   const dayString = trashDayElement.children[0].textContent;
   const day = +dayString.split(" ")[1];
   const month = months[dayString.split(" ")[2]];
-  const typeString = trashDayElement.children[1].textContent;
-  return { day: new Date(year, month, day), type: typeString };
+  const descString = trashDayElement.children[1].textContent;
+  return { day: new Date(year, month, day), type: trashDayElement.className, description: descString };
 }
 
 function toICalString(trashDays) {
@@ -64,7 +64,7 @@ function toICalString(trashDays) {
   trashDays.forEach(trashDay => {
     const day = trashDay.day;
     ical.push("BEGIN:VEVENT");
-    ical.push("UID:" + day.toISOString());
+    ical.push("UID:" + day.toISOString() + "-" + trashDay.type);
     ical.push("DTSTART;VALUE=DATE:" + day.getFullYear() + padZero(day.getMonth() + 1) + padZero(day.getDate()));
     ical.push("DTSTAMP:" + now.getFullYear() + padZero(now.getMonth() + 1) + padZero(now.getDate())
              + "T" + padZero(now.getHours()) + padZero(now.getMinutes()) + padZero(now.getSeconds()) + "Z")
