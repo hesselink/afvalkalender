@@ -68,7 +68,12 @@ function toICalString(trashDays) {
     ical.push("DTSTART;VALUE=DATE:" + day.getFullYear() + padZero(day.getMonth() + 1) + padZero(day.getDate()));
     ical.push("DTSTAMP:" + now.getFullYear() + padZero(now.getMonth() + 1) + padZero(now.getDate())
              + "T" + padZero(now.getHours()) + padZero(now.getMinutes()) + padZero(now.getSeconds()) + "Z")
-    ical.push("SUMMARY:" + trashDay.type);
+    ical.push("SUMMARY:" + trashDay.description);
+    ical.push("BEGIN:VALARM");
+    ical.push("TRIGGER:-PT5H");
+    ical.push("ACTION:DISPLAY");
+    ical.push("DESCRIPTION:" + trashDay.description);
+    ical.push("END:VALARM");
     ical.push("END:VEVENT");
   });
 
