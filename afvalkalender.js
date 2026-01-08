@@ -37,20 +37,25 @@ https.get("https://www.mijnafvalwijzer.nl/nl/" + zip + "/" + houseNumber + "/", 
 
 function extractTrashDaysFromHtml(data) {
   const document = new JSDOM(data).window.document;
-  const trashDaysElement = document.querySelector(".ophaaldagen");
-  const year = +trashDaysElement.getAttribute("id").slice(5);
-  const trashDayElements = trashDaysElement.querySelectorAll("p");
+  const year = +document.querySelector("#selectedYear").value.slice(6);
+  const trashDayElements = document.querySelectorAll(".month-section p");
   const trashDays = [].slice.apply(trashDayElements).map(trashDayElement => parseTrashDay(trashDayElement, year));
   return trashDays;
 }
 
 function parseTrashDay(trashDayElement, year) {
   const dayString = trashDayElement.children[0].textContent;
-  const day = +dayString.split(" ")[1];
-  const month = months[dayString.split(" ")[2]];
-  const descElement = trashDayElement.querySelector(".afvaldescr")
+  const dayStringParts = dayString.split(/\s/);
+  const day = +dayStringParts[1];
+  const month = months[dayStringParts[2]];
+  let descElement = trashDayElement.querySelector(".afvaldescr")
+  if (!descElement) {
+    // There are typos (!) where the class is .afva,ldescr, fall back
+    // to positional indexing.
+    descElement = trashDayElement.children[1];
+  }
   const descString = descElement.textContent;
-  return { day: new Date(year, month, day), type: trashDayElement.className, description: descString };
+  return { day: new Date(year, month, day), type: trashDayElement.classList[0], description: descString };
 }
 
 function toICalString(trashDays) {
